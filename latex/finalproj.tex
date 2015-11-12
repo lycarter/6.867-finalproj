@@ -1,0 +1,39 @@
+\documentclass{article}
+\usepackage[letterpaper, portrait, margin=1in]{geometry}
+\usepackage[utf8]{inputenc}
+
+\title{6.867 Project Proposal}
+\author{ Landon Carter, Courtney Guo, Jingyu Li }
+\date{November 2015}
+
+\begin{document}
+
+\maketitle
+
+\section{Description}
+In this work, we wish to implement semi-supervised image clustering. For this, we will train an autoencoder neural net with a relatively small set of labelled examples, representing only a subset of the clusters. From the hidden layer of this neural net, we will extract a compressed feature representation to use in EM clustering. The set of features to feed into the autoencoder will be a pre-processed set of features taken from OpenCV. This is particularly interesting, because we wish to separately cluster images that we do not already have examples of. An example would be training on labelled images of sunsets and people, and asking that the algorithm distinguish images of dogs and computers.
+
+As an auxillary, from each cluster we will select the example which is closest to the mean of the cluster, so that this example can be shown to a human for labelling. This example should be the best representation of each cluster, and so would be perfect for ``tagging'' purposes.
+\section{Challenges}
+\begin{itemize}
+\item It may be difficult to obtain representative features. 
+\item We need to guarantee we select a diverse and representative set of images for each category. Otherwise, we will not be able to extrapolate well to unseen data.
+\item Runtime may be a concern. Training a neural network takes significant time, so it is important to reduce images to a reasonable number of features (as inputs to the neural network). This is important because the search space will simply be too large if we have too many neurons. 
+\end{itemize}
+
+\section{Distribution of Work}
+Though we will each contribute to all aspects of the work and seek to fully understand all aspects, the features each of us will focus on are listed below:
+\begin{itemize}
+\item Landon Carter -- Implement EM clustering algorithm, construct datasets.
+\item Courtney Guo -- Design and implement neural network.
+\item Jingyu Li -- Reduce images to a large set of features (which will be inputted into the neural network and used to compose final features) using OpenCV.
+\end{itemize}
+\section{Timeline}
+\begin{itemize}
+\item November 21 -- Background research, implement clustering algorithm
+\item November 28 -- Neural network that gives features of images
+\item December 1 -- Combine neural network with clustering and train for good representative image features
+\item December 5 -- Be able to give representative images of specific categories
+\item December 8 -- Finish write-up
+\end{itemize}
+\end{document}
