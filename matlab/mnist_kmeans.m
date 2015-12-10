@@ -1,38 +1,38 @@
 % Load the training data into memory
 % xTrainImages = tr(:, 1:784);
-xTrainImages = num2cell(traindata, 2);
-tTrain = trainlabels;
-
-for i = 1:size(xTrainImages)
-    r = double(reshape(xTrainImages{i}(1:1024), 32, 32));
-    g = double(reshape(xTrainImages{i}(1025:2048), 32, 32));
-    b = double(reshape(xTrainImages{i}(2049:3072), 32, 32));
-    xTrainImages{i} = (r+g+b)/(3.0*255);
-end
-tTrainTemp = zeros(size(tTrain,1), 10);
-
-for i = 1:size(tTrain)
-    temp = zeros(10,1);
-    temp(tTrain(i)+1) = 1;
-    tTrainTemp(i, :) = temp;
-end
-
-xTestImages = num2cell(testdata, 2);
-tTest = testlabels;
-
-for i = 1:size(xTestImages)
-    r = double(reshape(xTestImages{i}(1:1024), 32, 32));
-    g = double(reshape(xTestImages{i}(1025:2048), 32, 32));
-    b = double(reshape(xTestImages{i}(2049:3072), 32, 32));
-    xTestImages{i} = (r+g+b)/(3.0*255);
-end
-tTestTemp = zeros(size(tTest,1), 10);
-
-for i = 1:size(tTest)
-    temp = zeros(10,1);
-    temp(tTest(i)+1) = 1;
-    tTestTemp(i, :) = temp;
-end
+% xTrainImages = num2cell(testdata, 2);
+% tTrain = testlabels;
+% 
+% for i = 1:size(xTrainImages)
+%     r = double(reshape(xTrainImages{i}(1:1024), 32, 32));
+%     g = double(reshape(xTrainImages{i}(1025:2048), 32, 32));
+%     b = double(reshape(xTrainImages{i}(2049:3072), 32, 32));
+%     xTrainImages{i} = (r+g+b)/(3.0*255);
+% end
+% tTrainTemp = zeros(size(tTrain,1), 10);
+% 
+% for i = 1:size(tTrain)
+%     temp = zeros(10,1);
+%     temp(tTrain(i)+1) = 1;
+%     tTrainTemp(i, :) = temp;
+% end
+% 
+% xTestImages = num2cell(testdata, 2);
+% tTest = testlabels;
+% 
+% for i = 1:size(xTestImages)
+%     r = double(reshape(xTestImages{i}(1:1024), 32, 32));
+%     g = double(reshape(xTestImages{i}(1025:2048), 32, 32));
+%     b = double(reshape(xTestImages{i}(2049:3072), 32, 32));
+%     xTestImages{i} = (r+g+b)/(3.0*255);
+% end
+% tTestTemp = zeros(size(tTest,1), 10);
+% 
+% for i = 1:size(tTest)
+%     temp = zeros(10,1);
+%     temp(tTest(i)+1) = 1;
+%     tTestTemp(i, :) = temp;
+% end
 
 % 
 % tTrain = tTrainTemp;
@@ -70,7 +70,12 @@ init = f(1:10,:);
 
 counts = zeros(10,10);
 for i=1:size(xTrainImages)
-    counts(clusterAssignments(i), labels(i)+1) = counts(clusterAssignments(i), labels(i)+1) + 1;
+    for j=1:10
+        if tTrain(j,i) == 1
+            counts(clusterAssignments(i), j) = counts(clusterAssignments(i), j) + 1;
+            break;
+        end
+    end
 end
 
 clusters = zeros(10);
@@ -87,7 +92,7 @@ for i=1:10
 end
 error = 0;
 for i=1:size(xTrainImages)
-    if clusters(clusterAssignments(i)) ~= labels(i)+1
+    if tTrain(clusters(clusterAssignments(i)),i) == 0
         error = error + 1;
     end
 end
