@@ -35,6 +35,9 @@ xValImages = xValImages';
 tTrain = tTrain';
 tVal = tVal';
 
+xTrainMatrix = xTrainImages;
+xValMatrix = xValImages;
+
 xTrainImages = reshape(xTrainImages,32,32,size(xTrainImages,2));
 xValImages = reshape(xValImages,32,32,size(xValImages,2));
 
@@ -49,5 +52,31 @@ autoenc1 = trainAutoencoder(xTrainImages,hiddenSize1, ...
 'SparsityProportion',0.15, ...
 'ScaleData', false);
 
-view(autoenc1)
+% view(autoenc1)
 plotWeights(autoenc1);
+feat1 = encode(autoenc1,xTrainImages);
+
+%layer 2
+hiddenSize2 = 50;
+autoenc2 = trainAutoencoder(feat1,hiddenSize2, ...
+'MaxEpochs',100, ...
+'L2WeightRegularization',0.002, ...
+'SparsityRegularization',4, ...
+'SparsityProportion',0.1, ...
+'ScaleData', false);
+
+% view(autoenc2);
+
+feat2 = encode(autoenc2,feat2);
+
+softnet = trainSoftmaxLayer(feat2, tTrain, 'maxEpochs', 400);
+% view(softnet);
+
+deepnet = stack(autoenc1,autoenc2,softnet);
+
+view(deepnet);
+
+y = deepnet(xVal)
+
+
+plotconfusion(tVal,y);
