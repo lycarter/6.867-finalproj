@@ -32,7 +32,7 @@ autoenc1 = trainAutoencoder(xTrainImages,hiddenSize1, ...
 view(autoenc1)
 plotWeights(autoenc1);
 feat1 = encode(autoenc1,xTrainImages);
-hiddenSize2 = 20;
+hiddenSize2 = 50;
 autoenc2 = trainAutoencoder(feat1,hiddenSize2, ...
     'MaxEpochs',100, ...
     'L2WeightRegularization',0.002, ...
@@ -43,7 +43,9 @@ view(autoenc2)
 feat2 = encode(autoenc2,feat1);
 f = transpose(feat2);
 init = vertcat(f(1,:), f(16,:), f(5,:), f(41,:), f(4,:), f(17,:), f(10,:), f(7,:), f(5,:), f(3,:));
-[centroids, clusterAssignments] = kmeans(transpose(feat2),10,init);
+[centroids, clusterAssignments] = kmeans_imp(transpose(feat2),10,init);
+
+[idx, C] = kmeans(transpose(feat2),10);
 
 softnet = trainSoftmaxLayer(feat2,tTrain,'MaxEpochs',400);
 view(softnet)
