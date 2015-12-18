@@ -9,12 +9,13 @@ function [result] = multisvm(TrainingSet,GroupTrain,TestSet)
 %found at http://www.mathworks.com/matlabcentral/fileexchange/33170-multi-class-support-vector-machine/
 
 u=unique(GroupTrain);
-numClasses=length(u);
+numClasses=length(u)
 result = zeros(length(TestSet(:,1)),1);
 models(numClasses).ClassificationSVM = fitcsvm([1 2; 1 1],[1;0]);
 
 %build models
 for k=1:numClasses
+    k
     %Vectorized statement that binarizes Group
     %where 1 is the current class and 0 is all other classes
     G1vAll=(GroupTrain==u(k));

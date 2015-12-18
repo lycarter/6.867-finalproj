@@ -1,4 +1,8 @@
 function [centroids, clusterAssignments] = kmeans_imp(X,K,init)
+%X = data (nxd)
+%K = numclusters
+%init = centroids (k x d)
+
 centroids = init;
 clusterAssignments = zeros(size(X,1),1);
 oldCost = 999999999999;
